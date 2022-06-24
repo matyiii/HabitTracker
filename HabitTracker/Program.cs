@@ -47,6 +47,12 @@ void GetUserInput()
             Insert();
             Console.WriteLine("Insert was succesfull.");
             break;
+        case "3":
+            Console.WriteLine("Choose an ID");
+            int id = int.Parse(Console.ReadLine());
+            Update(id);
+            Console.WriteLine("Update was succesfull.");
+            break;
         default:
             break;
     }
@@ -81,7 +87,7 @@ void Read()
 
 void Insert()
 {
-    Console.WriteLine("Date?");
+    Console.WriteLine("What date you want to insert?");
     string? insertDate = Console.ReadLine();
     Console.WriteLine("Quantity?");
     int insertQuantity = int.Parse(Console.ReadLine());
@@ -92,6 +98,25 @@ void Insert()
             connection.Open();
             tableCmd.CommandText = @$"INSERT INTO myHabit (Date,Quantity) VALUES ('{ insertDate}',{insertQuantity})";
             tableCmd.ExecuteReader();
+        }
+    }
+}
+
+void Update(int id) //TODO check if id exists in the table
+{
+    using (var connection = new SqliteConnection(connectionString))
+    {
+        using (var tableCmd = connection.CreateCommand())
+        {
+            connection.Open();
+            Console.Write("New Date: ");//TODO: show the previous value
+            string newDate = Console.ReadLine();
+            Console.Write("New Quantity: ");
+            int newQuantity = int.Parse(Console.ReadLine());
+            tableCmd.CommandText = @$"UPDATE myHabit SET Date='{newDate}',Quantity={newQuantity} WHERE Id={id}";
+            SqliteDataReader reader = tableCmd.ExecuteReader();
+            if (reader.RecordsAffected==0)
+                Console.WriteLine($"Id: {id} not found!");
         }
     }
 }

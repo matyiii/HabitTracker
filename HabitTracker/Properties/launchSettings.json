@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "HabitTracker": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\Matyi\\source\\repos\\HabitTracker\\HabitTracker"
+    }
+  }
+}

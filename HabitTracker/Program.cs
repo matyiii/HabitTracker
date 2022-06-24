@@ -41,7 +41,11 @@ void GetUserInput()
             break;
         case "1":
             Read();
-            Console.WriteLine("Lefutott a READ");
+            Console.WriteLine("Read was succesfull.");
+            break;
+        case "2":
+            Insert();
+            Console.WriteLine("Insert was succesfull.");
             break;
         default:
             break;
@@ -61,6 +65,7 @@ void Read()
             SqliteDataReader reader = tableCmd.ExecuteReader();
             if (reader.HasRows)
             {
+                Console.WriteLine("CRUD - Read");
                 while (reader.Read())
                 {
                     Console.WriteLine($"Id:{reader[0]}, Date:{reader[1]},Quantity:{reader[2]}");
@@ -70,6 +75,23 @@ void Read()
             {
                 Console.WriteLine("No rows found.");
             }
+        }
+    }
+}
+
+void Insert()
+{
+    Console.WriteLine("Date?");
+    string? insertDate = Console.ReadLine();
+    Console.WriteLine("Quantity?");
+    int insertQuantity = int.Parse(Console.ReadLine());
+    using (var connection = new SqliteConnection(connectionString))
+    {
+        using (var tableCmd = connection.CreateCommand())
+        {
+            connection.Open();
+            tableCmd.CommandText = @$"INSERT INTO myHabit (Date,Quantity) VALUES ('{ insertDate}',{insertQuantity})";
+            tableCmd.ExecuteReader();
         }
     }
 }

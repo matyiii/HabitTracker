@@ -5,7 +5,6 @@ string connectionString = @"Data Source=habit-Tracker.db";
 CreateDatabase();
 
 GetUserInput();
-Console.ReadLine();
 
 void CreateDatabase()
 {
@@ -38,12 +37,39 @@ void GetUserInput()
     switch (Console.ReadLine())
     {
         case "0":
-            Console.WriteLine("TESZT0");
+            Environment.Exit(0); // nem szükséges, break is elég
             break;
         case "1":
-            Console.WriteLine("TESZT1");
+            Read();
+            Console.WriteLine("Lefutott a READ");
             break;
         default:
             break;
+    }
+}
+
+//CRUD
+void Read()
+{
+    using (var connection = new SqliteConnection(connectionString))
+    {
+        using (var tableCmd = connection.CreateCommand())
+        {
+            connection.Open();
+            tableCmd.CommandText = @"SELECT Id,Date,Quantity FROM myHabit";
+            //tableCmd.CommandType = System.Data.CommandType.Text;
+            SqliteDataReader reader = tableCmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    Console.WriteLine($"Id:{reader[0]}, Date:{reader[1]},Quantity:{reader[2]}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No rows found.");
+            }
+        }
     }
 }

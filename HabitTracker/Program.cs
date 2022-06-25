@@ -49,11 +49,18 @@ void GetUserInput()
             break;
         case "3":
             Console.WriteLine("Choose an ID");
-            int id = int.Parse(Console.ReadLine());
-            Update(id);
+            int idToUpdate = int.Parse(Console.ReadLine());
+            Update(idToUpdate);
             Console.WriteLine("Update was succesfull.");
             break;
+        case "4":
+            Console.WriteLine("Choose an ID to delete");
+            int idToDelete = int.Parse(Console.ReadLine());
+            Delete(idToDelete);
+            Console.WriteLine("Delete was succesfull.");
+            break;
         default:
+            GetUserInput();
             break;
     }
 }
@@ -117,6 +124,19 @@ void Update(int id) //TODO check if id exists in the table
             SqliteDataReader reader = tableCmd.ExecuteReader();
             if (reader.RecordsAffected==0)
                 Console.WriteLine($"Id: {id} not found!");
+        }
+    }
+}
+
+void Delete(int id)
+{
+    using (var connection = new SqliteConnection(connectionString))
+    {
+        using (var tableCmd = connection.CreateCommand())
+        {
+            connection.Open();
+            tableCmd.CommandText = $"DELETE FROM myHabit WHERE Id={id}";
+            tableCmd.ExecuteNonQuery();
         }
     }
 }

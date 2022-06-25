@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.Sqlite; //Microsoft.Data.Sqlite nuget is kell nem cska a core
+﻿using Microsoft.Data.Sqlite; //Microsoft.Data.Sqlite NuGet is neccesery, Sqlite.Core is not enough
 
 string connectionString = @"Data Source=habit-Tracker.db";
 
@@ -18,9 +18,9 @@ void CreateDatabase()
                                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                     Date TEXT,
                                     Quantity INTEGER)";
-            tableCmd.ExecuteNonQuery(); //végrehajtja a parancsot ami nem lekérdezés és nem ad vissza adatot
+            tableCmd.ExecuteNonQuery(); //Execute without returing values
         }
-        //a using zárja a kapcsolatot nem kell külön
+        //using will close the connection no need to connection.Close()
     }
 }
 
@@ -138,13 +138,17 @@ void Update(int id) //TODO check if id exists in the table -- ContainsId functio
         using (var tableCmd = connection.CreateCommand())
         {
             connection.Open();
-            Console.Write("New Date: ");//TODO: show the previous value
+            tableCmd.CommandText = $"SELECT * FROM myHabit WHERE Id={id}";
+            SqliteDataReader reader2 = tableCmd.ExecuteReader();
+            reader2.Read();
+            Console.Write($"Old Date was:{reader2[1]}, New Date: ");//TODO: show the previous value
             string newDate = Console.ReadLine();
-            Console.Write("New Quantity: ");
+            Console.Write($"Old Quantity was:{reader2[2]}, New Quantity: ");
+            reader2.Close();
             int newQuantity = int.Parse(Console.ReadLine());
             tableCmd.CommandText = @$"UPDATE myHabit SET Date='{newDate}',Quantity={newQuantity} WHERE Id={id}";
-            SqliteDataReader reader = tableCmd.ExecuteReader();
-            if (reader.RecordsAffected==0)
+            SqliteDataReader reader1 = tableCmd.ExecuteReader();
+            if (reader1.RecordsAffected==0)
                 Console.WriteLine($"Id: {id} not found!");
         }
     }

@@ -2,7 +2,7 @@
   "profiles": {
     "HabitTracker": {
       "commandName": "Project",
-      "workingDirectory": "C:\\Users\\Matyi\\source\\repos\\HabitTracker\\HabitTracker"
+      "workingDirectory": "C:\\Users\\Matyi\\source\\repos\\matyiii\\HabitTracker\\HabitTracker\\bin\\Debug\\net6.0"
     }
   }
 }
